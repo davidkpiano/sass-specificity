@@ -15,8 +15,8 @@ figure .out > select.or[specificty] {
 }
 
 // As a function
-a ~ head #of + time {
-  $this-specificity-map: specificity(&); // (a: 1, b: 0, c: 3)
-  $this-specificity-value: specificity(&, true); // 65539
+a.head #of + time {
+  $this-specificity-map: specificity(&); // (a: 1, b: 1, c: 2)
+  $this-specificity-value: specificity(&, true); // 65794
 }
 ```
