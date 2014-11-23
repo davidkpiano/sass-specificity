@@ -1,14 +1,15 @@
-// ----
-// Sass (v3.4.7)
-// Compass (v1.0.1)
-// ----
+/// SCSS Specificity Calculator
+/// 
+/// Utility to calculate (and display) specificity or specificity map of any
+/// valid simple/compound/complex selector.
+/// @author David Khourshid
  
 /// Replaces a batch of substrings (needles) in a string (haystack)
 /// with a single replacement string.
 /// @access private
 /// @param {String} $haystack - string to perform search and replacement on
 /// @param {List | String} $needles - string or list of strings to replace globally
-/// @param {String} $replacement - replacement string to replace needles
+/// @param {String} $replacement ('') - replacement string to replace needles
 /// @return {String} replaced string
 @function str-replace-batch($haystack, $needles, $replacement: '') {
     $instances: false;
@@ -49,7 +50,7 @@
     $simple-selector: str-replace-batch($simple-selector, '::', ':');
     
     @if str-index($simple-selector, ':not(') == 1 {
-        $simple-selector: str-trim(str-slice($simple-selector, 6, -2));
+        $simple-selector: str-slice($simple-selector, 6, -2);
     }
     
     @each $type-key, $type-tokens in $types {
@@ -75,7 +76,7 @@
 /// limitation has been "resolved" in some browsers (try base 65536 for those).
 /// @access private
 /// @param {Map} $specificity-map - map of frequency of each type (a, b, c) in complex selector
-/// @param {Number} $base - base used to calculate specificity value (default: 256)
+/// @param {Number} $base (256) - base used to calculate specificity value (default: 256)
 /// @return {Number} specificity value of given specificity map as base 10 integer
 @function specificity-value($specificity-map, $base: 256) {
     $exponent-map: (a: 2, b: 1, c: 0);
@@ -91,7 +92,7 @@
 /// Returns the specificity map or value of given simple/complex/multiple selector(s).
 /// @access public
 /// @param {List | String} $initial-selector - selector returned by '&'
-/// @param {Bool} $integer - output specificity as integer? (default: false)
+/// @param {Bool} $integer (false) - output specificity as integer? (default: false)
 /// @return {Map | Number} specificity map or specificity value represented as integer
 @function specificity($initial-selector, $integer: false) {
     $initial-selector: str-replace-batch(#{$initial-selector}, ('+', '>', '~'));
@@ -122,4 +123,13 @@
     $specificity-map: map-values(map-get($specificities-map, $specificity-value));
     
     @return if($integer, $specificity-value, $specificity-map);
+}
+
+/// Outputs specificity in your CSS as (invalid) properties.
+/// Please, don't use this mixin in production.
+/// @access public
+/// @output specificity (map as string), specificity-value (specificity value as integer)
+@mixin specificity() {
+  specificity: specificity(&);
+  specificity-value: specificity(&, true);
 }
