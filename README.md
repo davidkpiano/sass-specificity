@@ -9,14 +9,14 @@ Utility to calculate (and display) specificity or specificity map of any valid s
 @include 'path/to/_specificity';
 
 // As a mixin
-figure .out > select.or[specificty] {
+figure .out > select.or[specificity] {
   @include specificity; // specificity: 0, 3, 2;
                         // specificity-value: 770;
 }
 
 // As a function
 a.head #of + time {
-  $this-specificity-map: specificity(&); // (a: 1, b: 1, c: 2)
+  $this-specificity-map: specificity(&); // 1, 1, 2
   $this-specificity-value: specificity(&, true); // 65794
 }
 ```
